@@ -1,0 +1,244 @@
+{
+  "schema": "moni-action-v1",
+  "id": "util.translator",
+  "version": "0.4.0",
+  "display": { "key": "action.name" },
+  "type": "script",
+  "engine": { "name": "lua", "version": "5.4" },
+  "entry": "main.lua",
+  "compat": {
+    "platforms": ["windows", "macos", "linux"],
+    "arch": ["any"],
+    "host": ">=0.6.0 <2.0.0",
+    "features": ["http.request>=1", "crypto>=1", "time.now>=1", "ui.panel>=1", "store>=1", "secret>=1", "panel.appearance>=1"]
+  },
+  "permissions": [
+    "screen.capture",
+    "ocr.run",
+    "clipboard.read",
+    "clipboard.write",
+    "ui.form",
+    "ui.panel",
+    "store",
+    "secret",
+    "net.fetch",
+    "notify"
+  ],
+  "net": {
+    "allow": [
+      "translate.alibaba.com",
+      "translate.volcengine.com",
+      "dict.youdao.com",
+      "api.mymemory.translated.net"
+    ],
+    "allow_http": false,
+    "max_response_bytes": 1048576,
+    "allow_option": "custom_providers"
+  },
+  "settings": {
+    "pages": [
+      { "id": "services", "label_key": "settings.page.services", "icon": "cloud" },
+      { "id": "ops", "label_key": "settings.page.ops", "icon": "sliders" },
+      { "id": "ui", "label_key": "settings.page.ui", "icon": "palette" },
+      { "id": "about", "label_key": "settings.page.about", "type": "about" }
+    ]
+  },
+  "options": {
+    "providers": {
+      "type": "list",
+      "items": [
+        { "value": "ali", "label_key": "provider.ali" },
+        { "value": "huoshan", "label_key": "provider.huoshan" },
+        { "value": "mymemory", "label_key": "provider.mymemory" }
+      ],
+      "default": ["ali", "huoshan", "mymemory"],
+      "ordered": true,
+      "min": 1,
+      "max": 4,
+      "page": "services",
+      "section": "translate",
+      "label_key": "opt.providers",
+      "help_key": "opt.providers.help"
+    },
+    "run_mode": {
+      "type": "enum",
+      "values": ["screenshot", "clipboard", "input"],
+      "default": "screenshot",
+      "page": "ops",
+      "label_key": "opt.run_mode"
+    },
+    "source_lang": {
+      "type": "enum",
+      "values": ["auto", "zh-CN", "en", "ja", "ko", "fr", "de", "es", "pt", "it", "ru", "ar", "nl", "sv", "fi", "no", "da", "pl", "tr"],
+      "default": "auto",
+      "page": "services",
+      "label_key": "opt.source_lang"
+    },
+    "target_lang": {
+      "type": "enum",
+      "values": ["zh-CN", "en", "ja", "ko", "fr", "de", "es", "pt", "it", "ru", "ar", "nl", "sv", "fi", "no", "da", "pl", "tr"],
+      "default": "zh-CN",
+      "page": "services",
+      "label_key": "opt.target_lang"
+    },
+    "dict_mode": {
+      "type": "enum",
+      "values": ["auto", "off"],
+      "default": "auto",
+      "page": "services",
+      "section": "dict",
+      "label_key": "opt.dict_mode",
+      "help_key": "opt.dict_mode.help"
+    },
+    "dict_providers": {
+      "type": "list",
+      "items": [
+        { "value": "youdao", "label_key": "provider.youdao_dict" }
+      ],
+      "default": ["youdao"],
+      "ordered": true,
+      "min": 1,
+      "max": 1,
+      "page": "services",
+      "section": "dict",
+      "label_key": "opt.dict_providers"
+    },
+    "custom_providers": {
+      "type": "records",
+      "max": 8,
+      "fields": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "method": { "type": "enum", "values": ["post_json", "get"], "default": "post_json" },
+        "body": { "type": "string" },
+        "result_path": { "type": "string" },
+        "headers": { "type": "string" }
+      },
+      "page": "services",
+      "section": "custom",
+      "label_key": "opt.custom_providers",
+      "help_key": "opt.custom_providers.help"
+    },
+    "custom_api_key": {
+      "type": "secret",
+      "page": "services",
+      "section": "custom",
+      "label_key": "opt.custom_api_key",
+      "help_key": "opt.custom_api_key.help"
+    },
+    "merge_paragraphs": {
+      "type": "boolean",
+      "default": true,
+      "page": "ops",
+      "label_key": "opt.merge_paragraphs"
+    },
+    "submit_key": {
+      "type": "enum",
+      "values": ["enter", "ctrl_enter"],
+      "default": "enter",
+      "page": "ops",
+      "label_key": "opt.submit_key"
+    },
+    "result_expand": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 10,
+      "widget": "slider",
+      "page": "ops",
+      "label_key": "opt.result_expand"
+    },
+    "history_limit": {
+      "type": "integer",
+      "default": 20,
+      "min": 0,
+      "max": 100,
+      "widget": "slider",
+      "page": "ops",
+      "label_key": "opt.history_limit"
+    },
+    "panel_position": {
+      "type": "enum",
+      "values": ["last", "pointer", "center", "top_left", "top_center", "top_right"],
+      "default": "last",
+      "page": "ui",
+      "label_key": "opt.panel_position"
+    },
+    "panel_max_height": {
+      "type": "number",
+      "default": 0.85,
+      "min": 0.3,
+      "max": 1.0,
+      "widget": "slider",
+      "page": "ui",
+      "label_key": "opt.panel_max_height"
+    },
+    "close_on_blur": {
+      "type": "boolean",
+      "default": false,
+      "page": "ui",
+      "label_key": "opt.close_on_blur"
+    },
+    "multi_panel": {
+      "type": "boolean",
+      "default": false,
+      "page": "ui",
+      "label_key": "opt.multi_panel",
+      "help_key": "opt.multi_panel.help"
+    },
+    "visible_buttons": {
+      "type": "multi_enum",
+      "values": ["copy_all", "pin", "screenshot", "history", "settings", "close"],
+      "default": ["copy_all", "pin", "screenshot", "history", "close"],
+      "page": "ui",
+      "label_key": "opt.visible_buttons"
+    },
+    "theme": {
+      "type": "enum",
+      "values": ["follow", "light", "dark"],
+      "default": "follow",
+      "page": "ui",
+      "label_key": "opt.theme"
+    },
+    "font_size": {
+      "type": "integer",
+      "default": 14,
+      "min": 10,
+      "max": 28,
+      "widget": "slider",
+      "page": "ui",
+      "label_key": "opt.font_size"
+    },
+    "font_family": {
+      "type": "enum",
+      "values": ["system", "mono"],
+      "default": "system",
+      "page": "ui",
+      "label_key": "opt.font_family"
+    },
+    "panel_bg": {
+      "type": "color",
+      "default": "#00000000",
+      "page": "ui",
+      "label_key": "opt.panel_bg",
+      "help_key": "opt.panel_bg.help"
+    },
+    "text_color": {
+      "type": "color",
+      "default": "#00000000",
+      "page": "ui",
+      "label_key": "opt.text_color",
+      "help_key": "opt.text_color.help"
+    }
+  },
+  "ui": {
+    "icon": "translate",
+    "group": "general",
+    "surface": "panel",
+    "widgets": [
+      "column", "row", "scroll", "card", "text",
+      "badge", "spinner", "button", "dropdown", "separator", "spacer"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "trigger": "api",
+  "locale": "zh-CN",
+  "options": {
+    "run_mode": "clipboard",
+    "providers": ["ali", "huoshan", "mymemory"]
+  },
+  "clipboard": "hello",
+  "http": [
+    {
+      "method": "GET",
+      "url": "https://translate.alibaba.com/api/translate/csrftoken",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"token\":\"fixture-csrf\",\"parameterName\":\"_csrf\",\"headerName\":\"X-XSRF-TOKEN_PROPERTY_ITEM\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://translate.alibaba.com/api/translate/text",
+      "error": "timeout"
+    },
+    {
+      "method": "GET",
+      "url": "https://api.mymemory.translated.net/get",
+      "match": "prefix",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"responseData\":{\"translatedText\":\"你好（免费）\"},\"responseStatus\":200}"
+    },
+    {
+      "method": "POST",
+      "url": "https://translate.volcengine.com/crx/translate/v1/",
+      "status": 500,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"message\":\"fixture\"}"
+    }
+  ],
+  "expect": {
+    "ok": true,
+    "code": "100",
+    "data": { "from": "en", "to": "zh-CN", "text": "hello" }
+  }
+}

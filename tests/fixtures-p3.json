@@ -1,0 +1,44 @@
+{
+  "locale": "zh-CN",
+  "trigger": "grid",
+  "options": {
+    "run_mode": "clipboard",
+    "providers": ["mymemory"],
+    "dict_mode": "off",
+    "custom_providers": [
+      {
+        "id": "demo",
+        "name": "自定义演示",
+        "url": "https://custom.example.org/translate?q={text_q}&from={from}&to={to}",
+        "method": "get",
+        "body": "",
+        "result_path": "data.translation",
+        "headers": "{\"authorization\":\"Bearer {key}\"}"
+      }
+    ],
+    "multi_panel": true
+  },
+  "secrets": {
+    "custom_api_key": "fixture-key"
+  },
+  "clipboard": "hello",
+  "http": [
+    {
+      "method": "GET",
+      "match": "prefix",
+      "url": "https://api.mymemory.translated.net/get?q=hello",
+      "status": 200,
+      "body": "{\"responseData\":{\"translatedText\":\"你好（MyMemory）\"}}"
+    },
+    {
+      "method": "GET",
+      "match": "prefix",
+      "url": "https://custom.example.org/translate?q=hello&from=en&to=zh-CN",
+      "status": 200,
+      "body": "{\"data\":{\"translation\":\"自定义译文\"}}"
+    }
+  ],
+  "expect": {
+    "ok": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "trigger": "panel",
+  "locale": "zh-CN",
+  "params": { "op": "history" },
+  "options": {
+    "providers": ["ali", "huoshan", "mymemory"],
+    "history_limit": 20,
+    "font_size": 16,
+    "font_family": "mono",
+    "panel_bg": "#101820",
+    "text_color": "#E6E6E6"
+  },
+  "store": {
+    "history.v1": "[{\"t\":1763500000000,\"f\":\"en\",\"to\":\"zh-CN\",\"s\":\"hello world\",\"r\":[{\"id\":\"ali\",\"body\":\"你好世界（阿里）\"},{\"id\":\"mymemory\",\"body\":\"你好世界（MyMemory）\"}]},{\"t\":1763490000000,\"f\":\"zh-CN\",\"to\":\"en\",\"s\":\"世界\",\"r\":[{\"id\":\"youdao\",\"body\":\"world\\ncn. 世界\"}]}]"
+  },
+  "expect": {
+    "ok": true,
+    "code": "100"
+  }
+}

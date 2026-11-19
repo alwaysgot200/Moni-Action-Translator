@@ -1,0 +1,53 @@
+{
+  "trigger": "api",
+  "locale": "zh-CN",
+  "options": {
+    "run_mode": "clipboard",
+    "providers": ["ali", "huoshan", "mymemory"]
+  },
+  "clipboard": "hello",
+  "http": [
+    {
+      "method": "GET",
+      "url": "https://translate.alibaba.com/api/translate/csrftoken",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"token\":\"fixture-csrf\",\"parameterName\":\"_csrf\",\"headerName\":\"X-XSRF-TOKEN_PROPERTY_ITEM\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://translate.alibaba.com/api/translate/text",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"translateText\":\"你好（阿里）\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://translate.volcengine.com/crx/translate/v1/",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"translation\":\"你好（火山）\"}"
+    },
+    {
+      "method": "GET",
+      "match": "prefix",
+      "url": "https://dict.youdao.com/jsonapi?q=hello",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"ec\":{\"word\":{\"usphone\":\"həˈloʊ\",\"ukphone\":\"həˈləʊ\",\"trs\":[{\"tr\":[{\"l\":{\"pos\":\"int\",\"i\":[\"喂；哈罗\",\"（用于打招呼）你好\"]}}]}]}}}"
+    },
+    {
+      "method": "GET",
+      "match": "prefix",
+      "url": "https://api.mymemory.translated.net/get?q=hello",
+      "status": 200,
+      "headers": { "content-type": "application/json" },
+      "body": "{\"responseStatus\":200,\"responseData\":{\"translatedText\":\"你好（MyMemory）\"}}"
+    }
+  ],
+  "expect": {
+    "ok": true,
+    "code": "100",
+    "data": { "from": "en", "to": "zh-CN", "text": "hello" }
+  }
+}
