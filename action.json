@@ -1,6 +1,6 @@
 {
-  "schema": "moni-action-v1",
-  "id": "util.translator",
+  "schema": "moni-action-v2",
+  "id": "f04246e3a8104e16f33a5015f82ac34e",
   "version": "0.4.0",
   "display": { "key": "action.name" },
   "type": "script",
